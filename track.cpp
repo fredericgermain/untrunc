@@ -241,7 +241,7 @@ void Track::parse(Atom *t, Atom *mdat) {
     //if audio use next?
 
     if(!codec.codec) throw string("No codec found!");
-    if(avcodec_open(codec.context, codec.codec)<0)
+    if(avcodec_open2(codec.context, codec.codec, NULL)<0)
         throw string("Could not open codec: ") + codec.context->codec_name;
 
 
