@@ -10,8 +10,8 @@
 using namespace std;
 
 
-static void reverse(int &input) {
-    int output;
+static void reverse(unsigned int &input) {
+    unsigned int output;
     char *a = ( char* )&input;
     char *b = ( char* )&output;
 
@@ -245,19 +245,19 @@ void Atom::updateLength() {
     }
 }
 
-int Atom::readInt(int offset) {
-    int value = *(int *)&(content[offset]);
+unsigned int Atom::readInt(off_t offset) {
+    unsigned int value = *(unsigned int *)&(content[offset]);
     reverse(value);
     return value;
 }
 
-void Atom::writeInt(int value, int offset) {
+void Atom::writeInt(unsigned int value, off_t offset) {
     assert(content.size() >= offset + 4);
     reverse(value);
-    *(int *)&(content[offset]) = value;
+    *(unsigned int *)&(content[offset]) = value;
 }
 
-void Atom::readChar(char *str, int offset, int length) {
+void Atom::readChar(char *str, off_t offset, int length) {
     for(int i = 0; i < length; i++)
         str[i] = content[offset + i];
 

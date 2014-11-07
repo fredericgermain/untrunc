@@ -13,9 +13,9 @@ public:
     bool create(std::string filename);
 
     void seek(long p);
-    long pos();
+    off_t pos();
     bool atEnd();
-    long length() { return size; }
+    unsigned long length() { return size; }
 
     int readInt();
     int readInt64();
@@ -28,7 +28,7 @@ public:
     int write(std::vector<unsigned char> &v);
 
 protected:
-    long size;
+    unsigned long size;
     FILE *file;
 };
 

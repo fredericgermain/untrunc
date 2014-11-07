@@ -143,7 +143,7 @@ void Mp4::analyze() {
         cout << "Keyframes  " << track.keyframes.size() << endl;
         for(unsigned int i = 0; i < track.keyframes.size(); i++) {
             int k = track.keyframes[i];
-            int offset = track.offsets[k] - (mdat->start + 8);
+            off_t offset = track.offsets[k] - (mdat->start + 8);
             int begin =  mdat->readInt(offset);
             int next =  mdat->readInt(offset + 4);
             cout << k << " Size: " << track.sizes[k] << " offset " << track.offsets[k]
@@ -151,9 +151,9 @@ void Mp4::analyze() {
         }
 
         for(unsigned int i = 0; i < track.offsets.size(); i++) {
-            int offset = track.offsets[i] - (mdat->start + 8);
+            off_t offset = track.offsets[i] - (mdat->start + 8);
             unsigned char *start = &(mdat->content[offset]);
-            int maxlength = mdat->content.size() - offset;
+            unsigned int maxlength = mdat->content.size() - offset;
 
             int begin =  mdat->readInt(offset);
             int next =  mdat->readInt(offset + 4);
@@ -162,7 +162,7 @@ void Mp4::analyze() {
                  << "  begin: " << hex << begin << " " << next << " end: " << end << dec << endl;
 
             bool matches = track.codec.matchSample(start, maxlength);
-            int length= track.codec.getLength(start, maxlength);
+            unsigned int length= track.codec.getLength(start, maxlength);
             if(!matches) {
                 cout << "Match failed! Hit enter for next match." << endl;
                 getchar();
@@ -205,6 +205,8 @@ void Mp4::repair(string filename) {
     while(1) {
 
         Atom *atom = new Atom;
+        unsigned long truncated_atom_size;
+
         try {
             atom->parseHeader(file);
         } catch(string) {
@@ -212,7 +214,7 @@ void Mp4::repair(string filename) {
         }
 
         if(atom->name != string("mdat")) {
-            int pos = file.pos();
+            off_t pos = file.pos();
             file.seek(pos - 8 + atom->length);
             delete atom;
             continue;
@@ -240,7 +242,7 @@ void Mp4::repair(string filename) {
         }
         long next =  mdat->readInt(offset + 4);
 
-        long maxlength = mdat->content.size() - offset;
+        unsigned long maxlength = mdat->content.size() - offset;
         if(maxlength >1000000) maxlength = 1000000;
 
         cout << "Begin: " << hex << begin << " " << next << dec;
@@ -249,7 +251,7 @@ void Mp4::repair(string filename) {
             Track &track = tracks[i];
             //sometime audio packets are difficult to match, but if they are the only ones....
             if(tracks.size() > 1 && !track.codec.matchSample(start, maxlength)) continue;
-            int length = track.codec.getLength(start, maxlength);
+            unsigned int length = track.codec.getLength(start, maxlength);
             if(length < -1 || length > 800000) {
                 cout << endl << "Invalid length. " << length << ". Wrong match in track: " << i << endl;
                 continue;

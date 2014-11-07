@@ -8,8 +8,8 @@ class File;
 
 class Atom {
 public:
-    int start;       //including 8 header bytes
-    int length;      //including 8 header bytes
+    off_t start;       //including 8 header bytes
+    unsigned long length;      //including 8 header bytes
     char name[5];
     char head[4];
     char version[4];
@@ -38,9 +38,9 @@ public:
     static bool isDual(char *id);
     static bool isVersioned(char *id);
 
-    int readInt(int offset);
-    void writeInt(int value, int offset);
-    void readChar(char *str, int offset, int length);
+    unsigned int readInt(off_t offset);
+    void writeInt(unsigned int value, off_t offset);
+    void readChar(char *str, off_t offset, int length);
 
 };
 

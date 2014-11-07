@@ -37,7 +37,7 @@ static void reverse(int &input) {
 using namespace std;
 
 
-void Codec::parse(Atom *trak, vector<int> &offsets, Atom *mdat) {
+void Codec::parse(Atom *trak, vector<off_t> &offsets, Atom *mdat) {
     Atom *stsd = trak->atomByName("stsd");
     int entries = stsd->readInt(4);
     if(entries != 1)
@@ -64,7 +64,7 @@ void Codec::parse(Atom *trak, vector<int> &offsets, Atom *mdat) {
 
 #define VERBOSE 1
 
-bool Codec::matchSample(unsigned char *start, int maxlength) {
+bool Codec::matchSample(unsigned char *start, unsigned int maxlength) {
     int s = *(int *)start;
 
     if(name == "avc1") {
@@ -128,7 +128,7 @@ bool Codec::matchSample(unsigned char *start, int maxlength) {
     return false;
 }
 
-int Codec::getLength(unsigned char *start, int maxlength) {
+int Codec::getLength(unsigned char *start, unsigned int maxlength) {
     if(name == "mp4a") {
         AVFrame *frame = avcodec_alloc_frame();
         if(!frame)
@@ -180,7 +180,7 @@ int Codec::getLength(unsigned char *start, int maxlength) {
         return -1;
 }
 
-bool Codec::isKeyframe(unsigned char *start, int maxlength) {
+bool Codec::isKeyframe(unsigned char *start, unsigned int maxlength) {
     if(name == "avc1") {
         //first byte of the NAL, the last 5 bits determine type (usually 5 for keyframe, 1 for intra frame)
         return (start[4] & 0x1F) == 5;
@@ -205,14 +205,15 @@ void Track::parse(Atom *t, Atom *mdat) {
     keyframes = getKeyframes(t);
     sizes = getSampleSizes(t);
 
-    vector<int> chunk_offsets = getChunkOffsets(t);
+    vector<off_t> chunk_offsets = getChunkOffsets(t);
     vector<int> sample_to_chunk = getSampleToChunk(t, chunk_offsets.size());
 
     assert(times.size() == sizes.size());
     assert(times.size() == sample_to_chunk.size());
     //compute actual offsets
     int old_chunk = -1;
-    int offset = -1;
+    off_t offset = (off_t)-1;
+    offsets.reserve(sizes.size());
     for(unsigned int i = 0; i < sizes.size(); i++) {
         int chunk = sample_to_chunk[i];
         int size = sizes[i];
@@ -384,8 +385,8 @@ vector<int> Track::getSampleSizes(Atom *t) {
 
 
 
-vector<int> Track::getChunkOffsets(Atom *t) {
-    vector<int> chunk_offsets;
+vector<off_t> Track::getChunkOffsets(Atom *t) {
+    vector<off_t> chunk_offsets;
     //chunk offsets
     Atom *stco = t->atomByName("stco");
     if(stco) {

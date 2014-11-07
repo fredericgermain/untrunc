@@ -41,16 +41,16 @@ bool File::create(string filename) {
     return true;
 }
 
-void File::seek(long p) {
+void File::seek(off_t p) {
     fseek(file, p, SEEK_SET);
 }
 
-long File::pos() {
+off_t File::pos() {
     return ftell(file);
 }
 
 bool File::atEnd() {
-    long pos = ftell(file);
+    off_t pos = ftell(file);
     return pos == size;
 }
 
