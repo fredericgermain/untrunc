@@ -1,0 +1,106 @@
+-ftyp [0, 24]
+-mdat [24, 2947462213]
+-moov [2947462237, 554954]
+--mvhd [2947462245, 108]
+     Timescale: 24000 Duration: 28801773
+--trak [2947462353, 288296]
+---tkhd [2947462361, 92]
+       Trak: 1 Duration: 28801773
+---edts [2947462453, 36]
+----elst [2947462461, 28]
+---mdia [2947462489, 288160]
+----mdhd [2947462497, 32]
+         Timescale: 24000 Duration: 28801773
+----hdlr [2947462529, 33]
+     Type: vide
+----minf [2947462562, 288087]
+-----vmhd [2947462570, 20]
+-----dinf [2947462590, 36]
+------dref [2947462598, 28]
+       Entries: 1
+-----stbl [2947462626, 288023]
+------stsd [2947462634, 151]
+       Entries: 1 codec: avc1
+------stts [2947462785, 24]
+       Entries: 1
+       samples: 28773 for: 1001
+------stsc [2947462809, 40]
+       Entries: 2
+       chunk: 1 nsamples: 12 id: 1
+       chunk: 2398 nsamples: 9 id: 1
+------stsz [2947462849, 115112]
+       Sample size: 0 Entries: 28773
+       Size 473881
+       Size 8583
+       Size 20102
+       Size 42016
+       Size 30626
+       Size 42039
+       Size 134501
+       Size 43599
+       Size 42265
+       Size 146261
+------stco [2947577961, 9608]
+       Entries: 2398
+       chunk: 32
+       chunk: 1064670
+       chunk: 2354685
+       chunk: 3666080
+       chunk: 4880607
+       chunk: 6181366
+       chunk: 7442517
+       chunk: 8677088
+       chunk: 9956790
+       chunk: 11214191
+------ctts [2947587569, 153472]
+------stss [2947741041, 9608]
+       Entries: 2398
+       Keyframe: 1
+       Keyframe: 13
+       Keyframe: 25
+       Keyframe: 37
+       Keyframe: 49
+       Keyframe: 61
+       Keyframe: 73
+       Keyframe: 85
+       Keyframe: 97
+       Keyframe: 109
+--trak [2947750649, 10001]
+---tkhd [2947750657, 92]
+       Trak: 2 Duration: 28801764
+---mdia [2947750749, 9901]
+----mdhd [2947750757, 32]
+         Timescale: 48000 Duration: 57603528
+----hdlr [2947750789, 33]
+     Type: soun
+----minf [2947750822, 9828]
+-----smhd [2947750830, 16]
+-----dinf [2947750846, 36]
+------dref [2947750854, 28]
+       Entries: 1
+-----stbl [2947750882, 9768]
+------stsd [2947750890, 68]
+       Entries: 1 codec: sowt
+------stts [2947750958, 24]
+       Entries: 1
+       samples: 57603528 for: 1
+------stsc [2947750982, 40]
+       Entries: 2
+       chunk: 1 nsamples: 24024 id: 1
+       chunk: 2398 nsamples: 18000 id: 1
+------stsz [2947751022, 20]
+       Sample size: 1 Entries: 57603528
+------stco [2947751042, 9608]
+       Entries: 2398
+       chunk: 2258589
+       chunk: 3569984
+       chunk: 4784511
+       chunk: 6085270
+       chunk: 7346421
+       chunk: 8580992
+       chunk: 9860694
+       chunk: 11118095
+       chunk: 12332177
+       chunk: 13604072
+--udta [2947760650, 256541]
+
