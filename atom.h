@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <file.h>
 
-class File;
 
 class Atom {
 public:
@@ -13,7 +13,7 @@ public:
     char name[5];
     char head[4];
     char version[4];
-    std::vector<unsigned char> content;
+    FileContent content;
     std::vector<Atom *> children;
 
     Atom(): start(0), length(-1) {

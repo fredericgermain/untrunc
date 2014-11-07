@@ -221,7 +221,7 @@ void Mp4::repair(string filename) {
         }
 
         mdat = atom;
-        mdat->content = file.read(file.length() - file.pos());
+        mdat->content = *file.read(file.length() - file.pos());
         break;
     }
 

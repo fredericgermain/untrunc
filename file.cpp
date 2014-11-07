@@ -1,7 +1,13 @@
 #include "file.h"
 #include <string>
+#include <sys/mman.h>
+#include <errno.h>
+#include <stdlib.h>
 
 using namespace std;
+
+#define PAGESIZE 4*1024
+//#define USE_MMAP
 
 static void reverse(int &input) {
     int output;
@@ -19,10 +25,13 @@ File::File(): file(NULL) {
 }
 
 File::~File() {
-    if(file)
+    if(file) {
+#ifdef USE_MMAP
+        munmap(mmap_data, ((size+PAGESIZE-1)/PAGESIZE)*PAGESIZE);
+#endif
         fclose(file);
+    }
 }
-
 
 bool File::open(string filename) {
     file = fopen(filename.c_str(), "r");
@@ -31,6 +40,12 @@ bool File::open(string filename) {
     fseek(file, 0L, SEEK_END);
     size = ftell(file);
     fseek(file, 0L, SEEK_SET);
+
+#ifdef USE_MMAP
+    mmap_data = (unsigned char*)mmap(NULL, ((size+PAGESIZE-1)/PAGESIZE)*PAGESIZE, PROT_READ, 0, fileno(file), 0);
+    if (mmap_data == (void*)-1)
+       fprintf(stderr, "errno:%d\n", errno);
+#endif
 
     return true;
 }
@@ -82,12 +97,31 @@ void File::readChar(char *dest, int n) {
         throw string("Could not read chars");
 }
 
-vector<unsigned char> File::read(long n) {
-    vector<unsigned char> dest(n);
-    long len = fread(&*dest.begin(), sizeof(unsigned char), n, file);
-    if(len != n)
+FileContent *File::read(off_t n) {
+    off_t _pos = pos();
+    FileContent *ret;
+    //vector<unsigned char> dest(n);
+    //off_t len = fread(&*dest.begin(), sizeof(unsigned char), n, file);
+    if(_pos + n > size)
         throw string("Could not read at position");
-    return dest;
+#ifdef USE_MMAP
+    ret = new FileContent(n, &mmap_data[_pos]);
+    seek(_pos + n);
+#else
+    unsigned char *data = (unsigned char *)malloc(n);
+    ret = new FileContent(n, data);
+    while (n != 0) {
+       size_t block_size;
+       if (n >= 1*1024*1024)
+           block_size = 1*1024*1024;
+       else
+           block_size = n;
+       fread(data, sizeof(unsigned char), block_size, file);
+       data += block_size;
+       n -= block_size;
+    }
+#endif
+    return ret;
 }
 
 int File::writeInt(int n) {
@@ -109,7 +143,7 @@ int File::writeChar(char *source, int n) {
     return n;
 }
 
-int File::write(vector<unsigned char> &v) {
+int File::write(FileContent& v) {
     fwrite(&*v.begin(), 1, v.size(), file);
     return v.size();
 }

@@ -52,7 +52,7 @@ void Atom::parse(File &file) {
         assert(file.pos() == start + length);
 
     } else {
-        content = file.read(length -8); //lenght includes header
+        content = *file.read(length -8); //lenght includes header
         if(content.size() < length -8)
             throw string("Failed reading atom content: ") + name;
     }
