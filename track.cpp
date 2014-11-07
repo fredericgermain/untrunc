@@ -46,7 +46,7 @@ void Codec::parse(Atom *trak, vector<off_t> &offsets, Atom *mdat) {
     char _codec[5];
     stsd->readChar(_codec, 12, 4);
     name = _codec;
-
+#if 0 // unused code
     mask1 = 0xffffffff;
     mask0 = 0xffffffff;
     //build the mask:
@@ -60,6 +60,7 @@ void Codec::parse(Atom *trak, vector<off_t> &offsets, Atom *mdat) {
         assert((s & mask1) == mask1);
         assert((~s & mask0) == mask0);
     }
+#endif
 }
 
 #define VERBOSE 1
