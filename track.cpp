@@ -82,7 +82,7 @@ bool Codec::matchSample(unsigned char *start, unsigned int maxlength) {
         //(we cannot recover time information, remember)
         if(start[0] == 0) {
 #ifdef VERBOSE
-            cout << "avc1: Failed because of 0 header\n";
+       //     cout << "avc1: Failed because of 0 header\n";
 #endif
             return true;
         }
