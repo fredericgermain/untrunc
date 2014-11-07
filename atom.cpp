@@ -51,6 +51,8 @@ void Atom::parse(File &file) {
         }
         assert(file.pos() == start + length);
 
+    } else if (name == string("mdat") && 0)  {
+        file.seek(file.pos() + length);
     } else {
         content = *file.read(length -8); //lenght includes header
         if(content.size() < length -8)
