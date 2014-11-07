@@ -125,6 +125,9 @@ bool Codec::matchSample(unsigned char *start, unsigned int maxlength) {
 
     } else if(name == "samr") {
         return start[0] == 0x3c;
+    } else if(name == "swot") {
+        // PCM data, no check possible
+        return true;
     }
     return false;
 }
@@ -177,6 +180,9 @@ int Codec::getLength(unsigned char *start, unsigned int maxlength) {
         return length;
     } else if(name == "samr") { //lenght is multiple of 32, we split packets.
         return 32;
+    } else if(name == "swot") {
+        // PCM data, length is the one from stsc atom header
+        return true;
     } else
         return -1;
 }
