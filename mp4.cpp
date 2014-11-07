@@ -220,8 +220,12 @@ void Mp4::repair(string filename) {
             continue;
         }
 
+	truncated_atom_size = file.length() - file.pos();
+        if (atom->length < truncated_atom_size)
+            truncated_atom_size = atom->length;
+
         mdat = atom;
-        mdat->content = *file.read(file.length() - file.pos());
+        mdat->content = *file.read(truncated_atom_size);
         break;
     }
 
